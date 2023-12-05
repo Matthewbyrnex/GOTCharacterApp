@@ -3,6 +3,7 @@
 
 @page "/characters"
 @inject GOTService GotService
+@inject NavigationManager NavigationManager
 
 <h1>Game of Thrones Characters</h1>
 
@@ -12,48 +13,33 @@
 }
 else
 {
-    foreach (var character in characters)
-    {
-        <div @onclick="() => LoadAdditionalDetails(character.FullName)">
-            <img src="@character.ImageUrl" alt="@character.FullName" />
-            <h2>@character.FullName (@character.Title)</h2>
-            <p>@character.Family</p>
-        </div>
-
-        @if (selectedCharacter != null && selectedCharacter.Name == character.FullName)
+    <div class="list-group">
+        @foreach (var character in characters)
         {
-            <div>
-                <h3>Additional Details for @selectedCharacter.Name:</h3>
-                <p>Gender: @selectedCharacter.Gender</p>
-                <p>Culture: @selectedCharacter.Culture</p>
-                <p>Born: @selectedCharacter.Born</p>
-                <p>Died: @selectedCharacter.Died</p>
-                <p>Titles: @string.Join(", ", selectedCharacter.Titles)</p>
-                <p>Aliases: @string.Join(", ", selectedCharacter.Aliases)</p>
-                <p>Father: @selectedCharacter.Father</p>
-                <p>Mother: @selectedCharacter.Mother</p>
-                <p>Spouse: @selectedCharacter.Spouse</p>
-                <p>Allegiances: @string.Join(", ", selectedCharacter.Allegiances)</p>
-                <p>Books: @string.Join(", ", selectedCharacter.Books)</p>
-                <p>POV Books: @string.Join(", ", selectedCharacter.PovBooks)</p>
-                <p>TV Series: @string.Join(", ", selectedCharacter.TvSeries)</p>
-                <p>Played By: @string.Join(", ", selectedCharacter.PlayedBy)</p>
-            </div>
+            <a class="list-group-item list-group-item-action"
+               @onclick="@(() => NavigateToDetails(character.FullName))">
+                <div class="media">
+                    <img src="@character.ImageUrl" alt="@character.FullName" class="align-self-start mr-3" style="width:64px;">
+                    <div class="media-body">
+                        <h5 class="mt-0">@character.FullName (@character.Title)</h5>
+                        <p>@character.Family</p>
+                    </div>
+                </div>
+            </a>
         }
-    }
+    </div>
 }
 
 @code {
     private Character[] characters;
-    private IceAndFireCharacter selectedCharacter;
 
     protected override async Task OnInitializedAsync()
     {
         characters = await GotService.GetAllCharactersAsync();
     }
 
-    private async Task LoadAdditionalDetails(string fullName)
+    private void NavigateToDetails(string fullName)
     {
-        selectedCharacter = await GotService.GetIceAndFireCharacterByNameAsync(fullName);
+        NavigationManager.NavigateTo($"/character-details/{fullName}");
     }
 }

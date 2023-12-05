@@ -22,8 +22,6 @@ namespace GOTCharacterApp.Models
         public string Died { get; set; }
         public List<string> Titles { get; set; }
         public List<string> Aliases { get; set; }
-        public string Father { get; set; }
-        public string Mother { get; set; }
         public string Spouse { get; set; }
         public List<string> Allegiances { get; set; }
         public List<string> Books { get; set; }

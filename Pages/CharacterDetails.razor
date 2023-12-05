@@ -1,29 +1,84 @@
-@using GOTCharacterApp.Services
-@using GOTCharacterApp.Models
-@inject GOTService GOTService
+@page "/character-details/{FullName}"
 
-@if (Character != null)
+@using GOTCharacterApp.Models
+@using GOTCharacterApp.Services
+@inject GOTService GotService
+
+@if (isLoading)
 {
-    <div>
-        <h5>@Character.Name</h5>
-        <p><strong>Gender:</strong> @Character.Gender</p>
-        <p><strong>Culture:</strong> @Character.Culture</p>
-        <p><strong>Born:</strong> @Character.Born</p>
-        <p><strong>Died:</strong> @Character.Died</p>
-        <p><strong>Titles:</strong> @string.Join(", ", Character.Titles)</p>
-        <p><strong>Aliases:</strong> @string.Join(", ", Character.Aliases)</p>
-        <p><strong>Father:</strong> @Character.Father</p>
-        <p><strong>Mother:</strong> @Character.Mother</p>
-        <p><strong>Spouse:</strong> @Character.Spouse</p>
-        <p><strong>Allegiances:</strong> @string.Join(", ", Character.Allegiances)</p>
-        <p><strong>Books:</strong> @string.Join(", ", Character.Books)</p>
-        <p><strong>POV Books:</strong> @string.Join(", ", Character.PovBooks)</p>
-        <p><strong>TV Series:</strong> @string.Join(", ", Character.TvSeries)</p>
-        <p><strong>Played By:</strong> @string.Join(", ", Character.PlayedBy)</p>
+    <div class="text-center">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+}
+else if (character != null && characterDetails != null)
+{
+    <div class="container mt-5">
+        <div class="card mb-3">
+            <div class="row no-gutters">
+                <div class="col-md-4">
+                    <img src="@character.ImageUrl" alt="@characterDetails.Name" class="card-img">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h2 class="card-title">@characterDetails.Name</h2>
+                        <p class="card-text"><strong>Gender:</strong> @characterDetails.Gender</p>
+                        <p class="card-text"><strong>Culture:</strong> @characterDetails.Culture</p>
+                        <p class="card-text"><strong>Born:</strong> @characterDetails.Born</p>
+                        <p class="card-text"><strong>Died:</strong> @characterDetails.Died</p>
+                        <p class="card-text"><strong>Titles:</strong> @string.Join(", ", characterDetails.Titles)</p>
+                        <p class="card-text"><strong>Aliases:</strong> @string.Join(", ", characterDetails.Aliases)</p>
+                        <p class="card-text"><strong>Spouse:</strong> @characterDetails.Spouse</p>
+                        <p class="card-text"><strong>Allegiances:</strong> @string.Join(", ", characterDetails.Allegiances)</p>
+                        <p class="card-text"><strong>Books:</strong> @string.Join(", ", characterDetails.Books)</p>
+                        <p class="card-text"><strong>POV Books:</strong> @string.Join(", ", characterDetails.PovBooks)</p>
+                        <p class="card-text"><strong>TV Series:</strong> @string.Join(", ", characterDetails.TvSeries)</p>
+                        <p class="card-text"><strong>Played By:</strong> @string.Join(", ", characterDetails.PlayedBy)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @errorMessage
+    </div>
+}
+else
+{
+    <div class="alert alert-warning" role="alert">
+        Character details not found.
     </div>
 }
 
 @code {
     [Parameter]
-    public IceAndFireCharacter Character { get; set; }
+    public string FullName { get; set; }
+
+    private Character character; // This will hold the image URL from your Character model
+    private IceAndFireCharacter characterDetails; // This holds the detailed info from IceAndFireCharacter
+    private bool isLoading = true;
+    private string errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Fetch character to get the image URL
+            var characters = await GotService.GetAllCharactersAsync();
+            character = characters?.FirstOrDefault(c => c.FullName.Equals(FullName, StringComparison.OrdinalIgnoreCase));
+            
+            // Fetch IceAndFireCharacter details
+            characterDetails = await GotService.GetIceAndFireCharacterByNameAsync(FullName);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error loading character details: {ex.Message}";
+        }
+
+        isLoading = false;
+    }
 }
