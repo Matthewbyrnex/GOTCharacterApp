@@ -1,0 +1,29 @@
+@using GOTCharacterApp.Services
+@using GOTCharacterApp.Models
+@inject GOTService GOTService
+
+@if (Character != null)
+{
+    <div>
+        <h5>@Character.Name</h5>
+        <p><strong>Gender:</strong> @Character.Gender</p>
+        <p><strong>Culture:</strong> @Character.Culture</p>
+        <p><strong>Born:</strong> @Character.Born</p>
+        <p><strong>Died:</strong> @Character.Died</p>
+        <p><strong>Titles:</strong> @string.Join(", ", Character.Titles)</p>
+        <p><strong>Aliases:</strong> @string.Join(", ", Character.Aliases)</p>
+        <p><strong>Father:</strong> @Character.Father</p>
+        <p><strong>Mother:</strong> @Character.Mother</p>
+        <p><strong>Spouse:</strong> @Character.Spouse</p>
+        <p><strong>Allegiances:</strong> @string.Join(", ", Character.Allegiances)</p>
+        <p><strong>Books:</strong> @string.Join(", ", Character.Books)</p>
+        <p><strong>POV Books:</strong> @string.Join(", ", Character.PovBooks)</p>
+        <p><strong>TV Series:</strong> @string.Join(", ", Character.TvSeries)</p>
+        <p><strong>Played By:</strong> @string.Join(", ", Character.PlayedBy)</p>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public IceAndFireCharacter Character { get; set; }
+}

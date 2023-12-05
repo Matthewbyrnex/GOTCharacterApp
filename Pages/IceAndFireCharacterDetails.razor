@@ -1,0 +1,39 @@
+@page "/ice-and-fire-character/{CharacterId:int}"
+@using GOTCharacterApp.Services
+@using GOTCharacterApp.Models
+@inject GOTService GotService
+
+@if (character == null)
+{
+    <p>Loading character information...</p>
+}
+else
+{
+    <h2>@character.Name</h2>
+    <p>Gender: @character.Gender</p>
+    <p>Culture: @character.Culture</p>
+    <p>Born: @character.Born</p>
+    <p>Died: @character.Died</p>
+    <p>Titles: @string.Join(", ", character.Titles)</p>
+    <p>Aliases: @string.Join(", ", character.Aliases)</p>
+    <p>Father: @character.Father</p>
+    <p>Mother: @character.Mother</p>
+    <p>Spouse: @character.Spouse</p>
+    <p>Allegiances: @string.Join(", ", character.Allegiances)</p>
+    <p>Books: @string.Join(", ", character.Books)</p>
+    <p>POV Books: @string.Join(", ", character.PovBooks)</p>
+    <p>TV Series: @string.Join(", ", character.TvSeries)</p>
+    <p>Played By: @string.Join(", ", character.PlayedBy)</p>
+}
+
+@code {
+    [Parameter]
+    public int CharacterId { get; set; }
+
+    private IceAndFireCharacter character;
+
+    protected override async Task OnInitializedAsync()
+    {
+        character = await GotService.GetIceAndFireCharacterAsync(CharacterId);
+    }
+}
