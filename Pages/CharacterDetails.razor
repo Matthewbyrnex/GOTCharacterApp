@@ -12,39 +12,101 @@
         </div>
     </div>
 }
+else if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @errorMessage
+    </div>
+}
 else if (character != null && characterDetails != null)
 {
     <div class="container mt-5">
         <div class="card mb-3">
             <div class="row no-gutters">
                 <div class="col-md-4">
-                    <img src="@character.ImageUrl" alt="@characterDetails.Name" class="card-img">
+                    <img src="@character.ImageUrl" alt="@character.FullName" class="card-img">
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
-                        <h2 class="card-title">@characterDetails.Name</h2>
-                        <p class="card-text"><strong>Gender:</strong> @characterDetails.Gender</p>
-                        <p class="card-text"><strong>Culture:</strong> @characterDetails.Culture</p>
-                        <p class="card-text"><strong>Born:</strong> @characterDetails.Born</p>
-                        <p class="card-text"><strong>Died:</strong> @characterDetails.Died</p>
-                        <p class="card-text"><strong>Titles:</strong> @string.Join(", ", characterDetails.Titles)</p>
-                        <p class="card-text"><strong>Aliases:</strong> @string.Join(", ", characterDetails.Aliases)</p>
-                        <p class="card-text"><strong>Spouse:</strong> @characterDetails.Spouse</p>
-                        <p class="card-text"><strong>Allegiances:</strong> @string.Join(", ", characterDetails.Allegiances)</p>
-                        <p class="card-text"><strong>Books:</strong> @string.Join(", ", characterDetails.Books)</p>
-                        <p class="card-text"><strong>POV Books:</strong> @string.Join(", ", characterDetails.PovBooks)</p>
-                        <p class="card-text"><strong>TV Series:</strong> @string.Join(", ", characterDetails.TvSeries)</p>
-                        <p class="card-text"><strong>Played By:</strong> @string.Join(", ", characterDetails.PlayedBy)</p>
+                        <h2 class="card-title">@character.FullName</h2>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Gender:</strong></p>
+                                <p>@characterDetails.Gender</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Culture:</strong></p>
+                                <p>@characterDetails.Culture</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Born:</strong></p>
+                                <p>@characterDetails.Born</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Died:</strong></p>
+                                <p>@characterDetails.Died</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Titles:</strong></p>
+                                <p>@string.Join(", ", characterDetails.Titles)</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Aliases:</strong></p>
+                                <p>@string.Join(", ", characterDetails.Aliases)</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <p><strong>Spouse:</strong></p>
+                        <p>@spouseDetails?.FullName</p>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Allegiances:</strong></p>
+                                @foreach (var allegiance in allegiancesDetails)
+                                {
+                                    var encodedUrl = System.Net.WebUtility.UrlEncode(allegiance.Url);
+                                    <p><a href="allegiance-details?url=@encodedUrl">@allegiance.Name</a></p>
+                                }
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Books:</strong></p>
+                                @foreach (var book in booksDetails)
+                                {
+                                    <p><a href="@book.Url">@book.Name</a></p>
+                                }
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>POV Books:</strong></p>
+                                @foreach (var povBook in povBooksDetails)
+                                {
+                                    <p><a href="@povBook.Url">@povBook.Name</a></p>
+                                }
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>TV Series:</strong></p>
+                                <p>@string.Join(", ", characterDetails.TvSeries)</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Played By:</strong></p>
+                                <p>@string.Join(", ", characterDetails.PlayedBy)</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-}
-else if (!string.IsNullOrEmpty(errorMessage))
-{
-    <div class="alert alert-danger" role="alert">
-        @errorMessage
     </div>
 }
 else
@@ -58,27 +120,52 @@ else
     [Parameter]
     public string FullName { get; set; }
 
-    private Character character; // This will hold the image URL from your Character model
-    private IceAndFireCharacter characterDetails; // This holds the detailed info from IceAndFireCharacter
+    private Character character;
+    private IceAndFireCharacter characterDetails;
+    private List<House> allegiancesDetails = new List<House>();
+    private List<Book> booksDetails = new List<Book>();
+    private List<Book> povBooksDetails = new List<Book>();
+    private Character spouseDetails;
     private bool isLoading = true;
     private string errorMessage;
 
     protected override async Task OnInitializedAsync()
     {
+        isLoading = true;
         try
         {
-            // Fetch character to get the image URL
-            var characters = await GotService.GetAllCharactersAsync();
-            character = characters?.FirstOrDefault(c => c.FullName.Equals(FullName, StringComparison.OrdinalIgnoreCase));
-            
-            // Fetch IceAndFireCharacter details
+            character = (await GotService.GetAllCharactersAsync())
+                .FirstOrDefault(c => c.FullName.Equals(FullName, StringComparison.OrdinalIgnoreCase));
+
             characterDetails = await GotService.GetIceAndFireCharacterByNameAsync(FullName);
+
+            if (characterDetails != null)
+            {
+                allegiancesDetails = (await Task.WhenAll(
+                    characterDetails.Allegiances.Select(url => GotService.GetHouseByUrlAsync(url))
+                )).ToList();
+
+                booksDetails = (await Task.WhenAll(
+                    characterDetails.Books.Select(url => GotService.GetBookByUrlAsync(url))
+                )).ToList();
+
+                povBooksDetails = (await Task.WhenAll(
+                    characterDetails.PovBooks.Select(url => GotService.GetBookByUrlAsync(url))
+                )).ToList();
+
+                if (!string.IsNullOrEmpty(characterDetails.Spouse))
+                {
+                    spouseDetails = await GotService.GetCharacterByUrlAsync(characterDetails.Spouse);
+                }
+            }
         }
         catch (Exception ex)
         {
             errorMessage = $"Error loading character details: {ex.Message}";
         }
-
-        isLoading = false;
+        finally
+        {
+            isLoading = false;
+        }
     }
 }

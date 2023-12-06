@@ -1,0 +1,71 @@
+@page "/allegiance-details"
+
+@using GOTCharacterApp.Services
+@using GOTCharacterApp.Models
+@inject GOTService GotService
+@inject NavigationManager NavigationManager
+
+@if (allegianceDetails != null)
+{
+    <div class="container mt-3">
+        <div class="card">
+            <div class="card-header">
+                <h2>@allegianceDetails.Name</h2>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">@allegianceDetails.Words</h5>
+                <p class="card-text"><strong>Region:</strong> @allegianceDetails.Region</p>
+                <p class="card-text"><strong>Coat of Arms:</strong> @allegianceDetails.CoatOfArms</p>
+                <p class="card-text"><strong>Titles:</strong> @string.Join(", ", allegianceDetails.Titles)</p>
+                <p class="card-text"><strong>Seats:</strong> @string.Join(", ", allegianceDetails.Seats)</p>
+                <p class="card-text"><strong>Current Lord:</strong> @allegianceDetails.CurrentLord</p>
+                <p class="card-text"><strong>Heir:</strong> @allegianceDetails.Heir</p>
+                <p class="card-text"><strong>Overlord:</strong> @allegianceDetails.Overlord</p>
+                <p class="card-text"><strong>Founded:</strong> @allegianceDetails.Founded</p>
+                <p class="card-text"><strong>Founder:</strong> @allegianceDetails.Founder</p>
+                <p class="card-text"><strong>Died Out:</strong> @allegianceDetails.DiedOut</p>
+                <p class="card-text"><strong>Ancestral Weapons:</strong> @string.Join(", ", allegianceDetails.AncestralWeapons)</p>
+                <p class="card-text"><strong>Cadet Branches:</strong> @string.Join(", ", allegianceDetails.CadetBranches)</p>
+                <p class="card-text"><strong>Sworn Members:</strong> @string.Join(", ", allegianceDetails.SwornMembers)</p>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <p>Loading...</p>
+}
+
+@code {
+    [Parameter] public string url { get; set; }
+    private House allegianceDetails;
+    private bool isLoading = true;
+    private string errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Parse the URL from the query string
+            var uri = new Uri(NavigationManager.Uri);
+            var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
+            var houseUrl = query["url"];
+            if (!string.IsNullOrWhiteSpace(houseUrl))
+            {
+                allegianceDetails = await GotService.GetHouseByUrlAsync(houseUrl);
+            }
+            else
+            {
+                errorMessage = "No URL provided for the house details.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error loading house details: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}
