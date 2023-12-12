@@ -77,10 +77,6 @@
       "PackagePath": "staticwebassets/icon-192.png"
     },
     {
-      "Id": "/Users/matthewb/GOTCharacterApp/wwwroot/index.html",
-      "PackagePath": "staticwebassets/index.html"
-    },
-    {
       "Id": "/Users/matthewb/GOTCharacterApp/wwwroot/logo.png",
       "PackagePath": "staticwebassets/logo.png"
     },

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "y03+cofA1LYw+hTQKLYa6EHExph0+moTWrkhqjJFQsQ=",
+  "Hash": "wCySfEYQHl1UjVmlCLFTtfW4GPrczGU2D6KI9h2Pgy8=",
   "Source": "GOTCharacterApp",
   "BasePath": "/",
   "Mode": "Root",
@@ -7172,23 +7172,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/icon-192.png"
-    },
-    {
-      "Identity": "/Users/matthewb/GOTCharacterApp/wwwroot/index.html",
-      "SourceId": "GOTCharacterApp",
-      "SourceType": "Discovered",
-      "ContentRoot": "/Users/matthewb/GOTCharacterApp/wwwroot/",
-      "BasePath": "/",
-      "RelativePath": "index.html",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/index.html"
     },
     {
       "Identity": "/Users/matthewb/GOTCharacterApp/wwwroot/logo.png",
