@@ -3,118 +3,198 @@
 @using GOTCharacterApp.Models
 @using GOTCharacterApp.Services
 @inject GOTService GotService
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Routing
+@inject NavigationManager NavigationManager
+
+
+<style>
+    body {
+        background-color: #131313;
+        color: #ddd;
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    .card {
+        background-color: #222;
+        color: #ddd;
+        border: none;
+    }
+
+    .card-header {
+        background-color: #5c2a2a;
+        color: #fff;
+        padding: 1rem;
+        border-bottom: 3px solid #3a0647;
+    }
+
+    .card-header h2 {
+        margin: 0;
+        font-size: 1.75rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .character-details-container {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .character-image {
+        width: 100%;
+        max-width: 300px;
+        border-radius: 5px;
+        object-fit: cover;
+    }
+
+    .character-info {
+        flex-grow: 1;
+        background-color: #333;
+        padding: 20px;
+        border-radius: 5px;
+    }
+
+    .custom-button-link {
+        background-color: #5c2a2a;
+        border: 1px solid #3a0647;
+        color: #fff;
+        padding: 5px 20px;
+        font-size: 14px;
+        border-radius: 5px;
+        text-decoration: none;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        display: inline-block;
+        text-align: center;
+    }
+
+    .custom-button-link:hover {
+        background-color: #3a0647;
+    }
+
+    .alert {
+        background-color: #561213;
+        color: #fff;
+        border: none;
+        border-radius: 0;
+        padding: 1rem 2rem;
+    }
+
+    hr {
+        border-top-color: #444;
+    }
+
+    .detail-section {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .detail-section p {
+        flex: 1 1 50%;
+        margin-bottom: 0.5rem;
+    }
+
+    .detail-section strong {
+        color: #aaa;
+    }
+</style>
 
 @if (isLoading)
 {
     <div class="text-center">
-        <div class="spinner-border" role="status">
-            <span class="sr-only">Loading...</span>
-        </div>
+    <div class="spinner-border" role="status">
+        <img src="/gotloader.png" alt="Loading..." role="status" style="width: 100px; height: 100px;" />
     </div>
+</div>
 }
 else if (!string.IsNullOrEmpty(errorMessage))
 {
     <div class="alert alert-danger" role="alert">
-        @errorMessage
-    </div>
+    @errorMessage
+</div>
 }
 else if (character != null && characterDetails != null)
 {
     <div class="container mt-5">
-        <div class="card mb-3">
-            <div class="row no-gutters">
-                <div class="col-md-4">
-                    <img src="@character.ImageUrl" alt="@character.FullName" class="card-img">
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h2 class="card-title">@character.FullName</h2>
-                        <hr>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p><strong>Gender:</strong></p>
-                                <p>@characterDetails.Gender</p>
-                            </div>
-                            <div class="col-md-6">
-                                <p><strong>Culture:</strong></p>
-                                <p>@characterDetails.Culture</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p><strong>Born:</strong></p>
-                                <p>@characterDetails.Born</p>
-                            </div>
-                            <div class="col-md-6">
-                                <p><strong>Died:</strong></p>
-                                <p>@characterDetails.Died</p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p><strong>Titles:</strong></p>
-                                <p>@string.Join(", ", characterDetails.Titles)</p>
-                            </div>
-                            <div class="col-md-6">
-                                <p><strong>Aliases:</strong></p>
-                                <p>@string.Join(", ", characterDetails.Aliases)</p>
-                            </div>
-                        </div>
-                        <hr>
-                        <p><strong>Spouse:</strong></p>
-                        <p>@spouseDetails?.FullName</p>
-                        <hr>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p><strong>Allegiances:</strong></p>
-                                @foreach (var allegiance in allegiancesDetails)
-                                {
-                                    var encodedUrl = System.Net.WebUtility.UrlEncode(allegiance.Url);
-                                    <p><a href="allegiance-details?url=@encodedUrl">@allegiance.Name</a></p>
-                                }
-                            </div>
-                            <div class="col-md-6">
-                                <p><strong>Books:</strong></p>
-                                @foreach (var book in booksDetails)
-                                {
-                                    <p><a href="@book.Url">@book.Name</a></p>
-                                }
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p><strong>POV Books:</strong></p>
-                                @foreach (var povBook in povBooksDetails)
-                                {
-                                    <p><a href="@povBook.Url">@povBook.Name</a></p>
-                                }
-                            </div>
-                            <div class="col-md-6">
-                                <p><strong>TV Series:</strong></p>
-                                <p>@string.Join(", ", characterDetails.TvSeries)</p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p><strong>Played By:</strong></p>
-                                <p>@string.Join(", ", characterDetails.PlayedBy)</p>
-                            </div>
-                        </div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <h2 class="card-title">@character.FullName</h2>
+        </div>
+        <div class="character-details-container">
+            <img src="@character.ImageUrl" alt="@character.FullName" class="character-image">
+            <div class="character-info">
+                <hr>
+                <div class="detail-section">
+                    <p><strong>Gender:</strong> @(string.IsNullOrEmpty(characterDetails.Gender) ? "Unknown" :
+                        characterDetails.Gender)</p>
+                        <p><strong>Culture:</strong> @(string.IsNullOrEmpty(characterDetails.Culture) ? "Unknown" :
+                        characterDetails.Culture)</p>
+                        <p><strong>Born:</strong> @(string.IsNullOrEmpty(characterDetails.Born) ? "Unknown" :
+                        characterDetails.Born)</p>
+                        <p><strong>Died:</strong> @(string.IsNullOrEmpty(characterDetails.Died) ? "Unknown" :
+                        characterDetails.Died)</p>
+                        <p><strong>Titles:</strong> @(characterDetails.Titles != null && characterDetails.Titles.Any() ?
+                        string.Join(", ", characterDetails.Titles) : "Unknown")</p>
+                        <p><strong>Aliases:</strong> <br>@(string.IsNullOrEmpty(characterDetails.Aliases?.FirstOrDefault())
+                        ? "Unknown" : string.Join(", ", characterDetails.Aliases))</p>
+                        <p><strong>Spouse:</strong> @(string.IsNullOrEmpty(spouseDetails?.FullName) ? "Unknown" :
+                        spouseDetails.FullName)</p>
+                    </div>
+                    <hr>
+                    <div>
+                        <p><strong>Allegiances:</strong></p>
+                        @foreach (var allegiance in allegiancesDetails)
+                        {
+                            var encodedUrl = System.Net.WebUtility.UrlEncode(allegiance.Url);
+                            <a href="allegiance-details?url=@encodedUrl" class="custom-button-link">
+                                @allegiance.Name
+                            </a>
+                        }
+                    </div>
+                    <br>
+                    <hr> <!-- Line break between Allegiances and Books -->
+                    <div>
+                        <p><strong>Books:</strong></p>
+                        @foreach (var book in booksDetails)
+                        {
+                            var bookId = ExtractIdFromUrl(book.Url);
+                            <NavLink href="@($"/book-details/{bookId}")" class="custom-button-link">
+                                @book.Name
+                            </NavLink>
+                        }
+                    </div>
+                    <hr>
+                    <div>
+                        <p><strong>TV Series:</strong>
+                            <br>@(string.IsNullOrEmpty(characterDetails.TvSeries?.FirstOrDefault()) ? "Unknown" :
+                            string.Join(", ", characterDetails.TvSeries))</p>
+                        <p><strong>Played By:</strong>
+                            <br>@(string.IsNullOrEmpty(characterDetails.PlayedBy?.FirstOrDefault()) ? "Unknown" :
+                            string.Join(", ", characterDetails.PlayedBy))</p>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- Return to Character List Button -->
+                        <div class="card-footer text-center">
+                            <button class="btn btn-secondary" @onclick="NavigateToCharacters">
+                                Return to All Characters
+                            </button>
+                        </div>
     </div>
 }
+
 else
 {
     <div class="alert alert-warning" role="alert">
-        Character details not found.
-    </div>
+    Character details not found.
+</div>
 }
+
 
 @code {
     [Parameter]
@@ -124,10 +204,16 @@ else
     private IceAndFireCharacter characterDetails;
     private List<House> allegiancesDetails = new List<House>();
     private List<Book> booksDetails = new List<Book>();
-    private List<Book> povBooksDetails = new List<Book>();
     private Character spouseDetails;
     private bool isLoading = true;
     private string errorMessage;
+
+    private string ExtractIdFromUrl(string url)
+    {
+        var uri = new Uri(url);
+        var segments = uri.AbsolutePath.Split('/');
+        return segments.LastOrDefault();
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -135,22 +221,18 @@ else
         try
         {
             character = (await GotService.GetAllCharactersAsync())
-                .FirstOrDefault(c => c.FullName.Equals(FullName, StringComparison.OrdinalIgnoreCase));
+            .FirstOrDefault(c => c.FullName.Equals(FullName, StringComparison.OrdinalIgnoreCase));
 
             characterDetails = await GotService.GetIceAndFireCharacterByNameAsync(FullName);
 
             if (characterDetails != null)
             {
                 allegiancesDetails = (await Task.WhenAll(
-                    characterDetails.Allegiances.Select(url => GotService.GetHouseByUrlAsync(url))
+                characterDetails.Allegiances.Select(url => GotService.GetHouseByUrlAsync(url))
                 )).ToList();
 
                 booksDetails = (await Task.WhenAll(
-                    characterDetails.Books.Select(url => GotService.GetBookByUrlAsync(url))
-                )).ToList();
-
-                povBooksDetails = (await Task.WhenAll(
-                    characterDetails.PovBooks.Select(url => GotService.GetBookByUrlAsync(url))
+                characterDetails.Books.Select(url => GotService.GetBookByUrlAsync(url))
                 )).ToList();
 
                 if (!string.IsNullOrEmpty(characterDetails.Spouse))
@@ -167,5 +249,10 @@ else
         {
             isLoading = false;
         }
+    }
+
+    private void NavigateToCharacters()
+    {
+        NavigationManager.NavigateTo("/characters");
     }
 }

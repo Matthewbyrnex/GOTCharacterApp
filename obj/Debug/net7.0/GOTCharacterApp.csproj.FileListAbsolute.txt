@@ -1,9 +1,3 @@
-/Users/matthewb/GOTCharacterApp/obj/Debug/net7.0/GOTCharacterApp.csproj.AssemblyReference.cache
-/Users/matthewb/GOTCharacterApp/obj/Debug/net7.0/GOTCharacterApp.GeneratedMSBuildEditorConfig.editorconfig
-/Users/matthewb/GOTCharacterApp/obj/Debug/net7.0/GOTCharacterApp.AssemblyInfoInputs.cache
-/Users/matthewb/GOTCharacterApp/obj/Debug/net7.0/GOTCharacterApp.AssemblyInfo.cs
-/Users/matthewb/GOTCharacterApp/obj/Debug/net7.0/GOTCharacterApp.csproj.CoreCompileInputs.cache
-/Users/matthewb/GOTCharacterApp/obj/Debug/net7.0/GOTCharacterApp.MvcApplicationPartsAssemblyInfo.cache
 /Users/matthewb/GOTCharacterApp/bin/Debug/net7.0/wwwroot/_framework/blazor.boot.json
 /Users/matthewb/GOTCharacterApp/bin/Debug/net7.0/wwwroot/_framework/blazor.webassembly.js
 /Users/matthewb/GOTCharacterApp/bin/Debug/net7.0/wwwroot/_framework/dotnet.7.0.11.a23ms51r0l.js
@@ -608,6 +602,12 @@
 /Users/matthewb/GOTCharacterApp/bin/Debug/net7.0/icudt_CJK.dat
 /Users/matthewb/GOTCharacterApp/bin/Debug/net7.0/icudt_EFIGS.dat
 /Users/matthewb/GOTCharacterApp/bin/Debug/net7.0/icudt_no_CJK.dat
+/Users/matthewb/GOTCharacterApp/obj/Debug/net7.0/GOTCharacterApp.csproj.AssemblyReference.cache
+/Users/matthewb/GOTCharacterApp/obj/Debug/net7.0/GOTCharacterApp.GeneratedMSBuildEditorConfig.editorconfig
+/Users/matthewb/GOTCharacterApp/obj/Debug/net7.0/GOTCharacterApp.AssemblyInfoInputs.cache
+/Users/matthewb/GOTCharacterApp/obj/Debug/net7.0/GOTCharacterApp.AssemblyInfo.cs
+/Users/matthewb/GOTCharacterApp/obj/Debug/net7.0/GOTCharacterApp.csproj.CoreCompileInputs.cache
+/Users/matthewb/GOTCharacterApp/obj/Debug/net7.0/GOTCharacterApp.MvcApplicationPartsAssemblyInfo.cache
 /Users/matthewb/GOTCharacterApp/obj/Debug/net7.0/build-gz/mqVCS1HA.gz
 /Users/matthewb/GOTCharacterApp/obj/Debug/net7.0/build-gz/DrflTlv7.gz
 /Users/matthewb/GOTCharacterApp/obj/Debug/net7.0/build-gz/UUAW8164.gz

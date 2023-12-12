@@ -1,5 +1,58 @@
 ﻿@inherits LayoutComponentBase
 
+<style>
+    body {
+        background-color: #292b2c; /* Dark background color for the entire page */
+    }
+
+    .page {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+
+    main {
+        flex: 1;
+    }
+
+    .sidebar {
+        background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+        width: 250px;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+    }
+
+    .top-row {
+        background-color: #1c1f26; /* Dark slate grey with a bluish tint */
+        justify-content: flex-end;
+        height: 3.5rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .top-row a {
+        white-space: nowrap;
+        margin-left: 1.5rem;
+        text-decoration: none;
+        color: #fff; /* White text color */
+    }
+
+    .top-row a:hover {
+        text-decoration: underline;
+    }
+
+    .top-row a:first-child {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .content {
+        padding-left: 2rem !important;
+        padding-right: 1.5rem !important;
+    }
+</style>
+
 <div class="page">
     <div class="sidebar">
         <NavMenu />

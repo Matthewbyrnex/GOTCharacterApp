@@ -1,44 +1,151 @@
-@using GOTCharacterApp.Models
-@using GOTCharacterApp.Services
-
 @page "/characters"
 @inject GOTService GotService
 @inject NavigationManager NavigationManager
 
-<h1>Game of Thrones Characters</h1>
+<div class="container py-4">
+    <img src="/logo.png" alt="Logo" class="img-fluid mb-4 mx-auto d-block" style="max-width: 50%;" />
 
-@if (characters == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <div class="list-group">
-        @foreach (var character in characters)
-        {
-            <a class="list-group-item list-group-item-action"
-               @onclick="@(() => NavigateToDetails(character.FullName))">
-                <div class="media">
-                    <img src="@character.ImageUrl" alt="@character.FullName" class="align-self-start mr-3" style="width:64px;">
-                    <div class="media-body">
-                        <h5 class="mt-0">@character.FullName (@character.Title)</h5>
+    <div class="row mb-3">
+        <div class="col-md-6 mx-auto text-center">
+            <input type="text" class="form-control custom-search-input" placeholder="Search characters..." @oninput="SearchCharacters" />
+        </div>
+    </div>
+
+    @if (filteredCharacters == null)
+    {
+        <div class="d-flex justify-content-center">
+            <div class="spinner-grow text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var character in filteredCharacters)
+            {
+                <div class="col-md-6 col-lg-4 mb-3">
+                    <div class="card h-100 character-card" style="background-color: #171717; color: #fff;">
+                        <img src="@character.ImageUrl" class="card-img-top character-image" alt="@character.FullName">
+                        <div class="card-body text-center">
+                            <h5 class="card-title character-name">@character.FullName</h5>
+                            <p class="card-text character-title">@character.Title</p>
+                        </div>
+                        <div class="card-footer text-center">
+                            <button class="btn btn-primary character-button" @onclick="@(() => NavigateToDetails(character.FullName))">
+                                Character Details
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </a>
+            }
+        </div>
+    }
+</div>
+
+<style>
+
+        body {
+            background-image: url('/dragon.png');
+            background-repeat: repeat; /* Repeat the image */
+            background-attachment: fixed; /* Fixed background */
+            background-color: #292b2c; /* Dark background color in case the image doesn't load */
         }
-    </div>
-}
+
+    .custom-search-input {
+        background-color: #171717; /* Dark background color */
+        color: #fff; /* Text color */
+        border-color: #5c2a2a; /* Border color */
+        border-radius: 5px; /* Rounded corners */
+        padding: 10px; /* Adjust padding as needed */
+        transition: border-color 0.3s ease-in-out; /* Smooth transition for border color */
+    }
+
+    .custom-search-input:focus {
+        border-color: #3a0647; /* Wine color border on focus */
+    }
+        .character-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            object-position: center top;
+            background-color: #000;
+        }
+
+    /* Add a smooth hover effect for character cards */
+    .character-card {
+        transform: translateY(0);
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .character-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Style for character name */
+    .character-name {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    /* Style for character title */
+    .character-title {
+        font-size: 14px;
+        font-style: italic;
+        color: #aaa;
+    }
+
+    /* Button style */
+    .character-button {
+        background-color: #5c2a2a;
+        border-color: #5c2a2a;
+        color: #fff;
+    }
+
+    .character-button:hover {
+        background-color: #3a0647; /* Slightly darker wine color on hover for a subtle effect */
+        border-color: #3a0647;
+    }
+</style>
 
 @code {
     private Character[] characters;
+    private string searchQuery = "";
+
+    // Filtered characters based on searchQuery
+    private Character[] filteredCharacters;
 
     protected override async Task OnInitializedAsync()
     {
         characters = await GotService.GetAllCharactersAsync();
+        FilterCharacters();
+    }
+
+    // Update the filteredCharacters array based on the searchQuery
+    private void FilterCharacters()
+    {
+        if (string.IsNullOrWhiteSpace(searchQuery))
+        {
+            filteredCharacters = characters;
+        }
+        else
+        {
+            filteredCharacters = characters
+                .Where(character => character.FullName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+                .ToArray();
+        }
     }
 
     private void NavigateToDetails(string fullName)
     {
         NavigationManager.NavigateTo($"/character-details/{fullName}");
+    }
+
+    // Handle live search as the user types
+    private void SearchCharacters(ChangeEventArgs e)
+    {
+        searchQuery = e.Value.ToString();
+        FilterCharacters();
     }
 }

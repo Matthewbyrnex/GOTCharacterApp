@@ -2,8 +2,10 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using GOTCharacterApp.Models;
+
 using System.Collections.Generic;
 using System.Linq;
+
 
 namespace GOTCharacterApp.Services
 {
@@ -39,10 +41,22 @@ namespace GOTCharacterApp.Services
             return await _httpClient.GetFromJsonAsync<House>(url);
         }
 
+
         // Method to get a book by URL
         public async Task<Book> GetBookByUrlAsync(string url)
         {
-            return await _httpClient.GetFromJsonAsync<Book>(url);
+            try
+            {
+                var response = await _httpClient.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                return await response.Content.ReadFromJsonAsync<Book>();
+            }
+            catch (HttpRequestException ex)
+            {
+                // Log the exception details here
+                Console.Error.WriteLine($"Error fetching book data: {ex.Message}");
+                return null; // or handle the exception as appropriate
+            }
         }
 
         // Method to get a character by URL
@@ -51,10 +65,19 @@ namespace GOTCharacterApp.Services
             return await _httpClient.GetFromJsonAsync<Character>(url);
         }
 
-        public async Task<string> GetCharacterNameByUrlAsync(string url)
+       
+        public async Task<(string Id, string Name)> GetCharacterNameByUrlAsync(string url)
         {
-            var character = await _httpClient.GetFromJsonAsync<Character>(url);
-            return character != null ? character.FullName : null;
+            var character = await _httpClient.GetFromJsonAsync<IceAndFireCharacter>(url);
+            if (character != null)
+            {
+                var id = new Uri(url).Segments.Last();
+                return (Id: id, Name: character.Name);
+            }
+            else
+            {
+                return (Id: null, Name: "Unknown Character");
+            }
         }
 
         // In GOTService.cs
@@ -64,7 +87,22 @@ namespace GOTCharacterApp.Services
             return house != null ? house.Name : null;
         }
 
-        
+
+        public async Task<Book> GetBookByIdAsync(string id)
+        {
+            var url = $"https://anapioficeandfire.com/api/books/{id}";
+            var response = await _httpClient.GetAsync(url);
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<Book>();
+            }
+            else
+            {
+                // Handle the case where the API does not return a 2xx success code
+                throw new HttpRequestException($"HTTP request failed with status code {response.StatusCode}");
+            }
+        }
+
 
     }
 }

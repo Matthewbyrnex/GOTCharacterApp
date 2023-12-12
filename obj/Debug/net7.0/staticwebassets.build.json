@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Ft6M2tpi0TZ3EtYI2umd4El3Kla9UdpMxWkhVcBHS/o=",
+  "Hash": "y03+cofA1LYw+hTQKLYa6EHExph0+moTWrkhqjJFQsQ=",
   "Source": "GOTCharacterApp",
   "BasePath": "/",
   "Mode": "Root",
@@ -7106,6 +7106,23 @@
       "OriginalItemSpec": "wwwroot/css/open-iconic/README.md"
     },
     {
+      "Identity": "/Users/matthewb/GOTCharacterApp/wwwroot/dragon.png",
+      "SourceId": "GOTCharacterApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/matthewb/GOTCharacterApp/wwwroot/",
+      "BasePath": "/",
+      "RelativePath": "dragon.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/dragon.png"
+    },
+    {
       "Identity": "/Users/matthewb/GOTCharacterApp/wwwroot/favicon.png",
       "SourceId": "GOTCharacterApp",
       "SourceType": "Discovered",
@@ -7121,6 +7138,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/favicon.png"
+    },
+    {
+      "Identity": "/Users/matthewb/GOTCharacterApp/wwwroot/gotloader.png",
+      "SourceId": "GOTCharacterApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/matthewb/GOTCharacterApp/wwwroot/",
+      "BasePath": "/",
+      "RelativePath": "gotloader.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/gotloader.png"
     },
     {
       "Identity": "/Users/matthewb/GOTCharacterApp/wwwroot/icon-192.png",
@@ -7155,6 +7189,40 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/index.html"
+    },
+    {
+      "Identity": "/Users/matthewb/GOTCharacterApp/wwwroot/logo.png",
+      "SourceId": "GOTCharacterApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/matthewb/GOTCharacterApp/wwwroot/",
+      "BasePath": "/",
+      "RelativePath": "logo.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/logo.png"
+    },
+    {
+      "Identity": "/Users/matthewb/GOTCharacterApp/wwwroot/modalHelper.js",
+      "SourceId": "GOTCharacterApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/matthewb/GOTCharacterApp/wwwroot/",
+      "BasePath": "/",
+      "RelativePath": "modalHelper.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/modalHelper.js"
     },
     {
       "Identity": "/Users/matthewb/GOTCharacterApp/wwwroot/sample-data/weather.json",

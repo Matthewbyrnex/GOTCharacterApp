@@ -1,0 +1,256 @@
+@page "/book-details/{BookId:int}"
+@using GOTCharacterApp.Models
+@using GOTCharacterApp.Services
+@inject GOTService GotService
+@inject NavigationManager NavigationManager
+
+<style>
+    body {
+        background-color: #131313;
+        color: #ddd;
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    .card {
+        background-color: #222;
+        color: #ddd;
+        border: none;
+    }
+
+    .card-header {
+        background-color: #5c2a2a;
+        color: #fff;
+        padding: 1rem;
+        border-bottom: 3px solid #3a0647;
+    }
+
+    .card-title {
+        color: #fff;
+        font-size: 1.75rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 1rem;
+        text-shadow: 1px 1px 2px #000;
+    }
+
+    .card-body {
+        padding: 2rem;
+    }
+
+    .character-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .character-item {
+        background-color: #333;
+        border-radius: 5px;
+        padding: 10px;
+        color: #ddd;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .center-button {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .btn-primary {
+        background-color: #5c2a2a;
+        border: 1px solid #3a0647;
+        color: #fff;
+        padding: 10px 15px;
+        font-size: 1rem;
+        border-radius: 5px;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #3a0647;
+    }
+
+    .alert {
+        background-color: #561213;
+        color: #fff;
+        border: none;
+        border-radius: 0;
+        padding: 1rem 2rem;
+    }
+</style>
+
+@if (isLoading)
+{
+    <div class="text-center">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+}
+else if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @errorMessage
+    </div>
+}
+else if (bookDetails != null)
+{
+    <div class="container mt-5">
+        <div class="card mb-3">
+            <div class="card-header">
+                <h2 class="card-title">@bookDetails.Name</h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>ISBN:</strong> @bookDetails.Isbn</p>
+                        <p><strong>Number of Pages:</strong> @bookDetails.NumberOfPages</p>
+                        <p><strong>Country:</strong> @bookDetails.Country</p>
+                        <p><strong>Released:</strong> @bookDetails.Released.ToString("D")</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Authors:</strong> @string.Join(", ", bookDetails.Authors)</p>
+                        <p><strong>Publisher:</strong> @bookDetails.Publisher</p>
+                        <p><strong>Media Type:</strong> @bookDetails.MediaType</p>
+                    </div>
+                </div>
+                <hr>
+                <h3>Characters:</h3>
+                <div class="character-list">
+                    @foreach (var characterName in characterLinks.Take(charactersToShow))
+                    {
+                        <div class="character-item">
+                            @characterName.Name
+                        </div>
+                    }
+                </div>
+                @if (showLoadMore)
+                {
+                    <div class="center-button mt-3">
+                        @if (charactersToShow == 20)
+                        {
+                            <button @onclick="LoadMoreCharacters" class="btn btn-primary">Load More</button>
+                        }
+                        else
+                        {
+                            <button @onclick="ShowLessCharacters" class="btn btn-primary">Show Less</button>
+                        }
+                    </div>
+                }
+                <hr>
+                <h3>POV Characters:</h3>
+                <div class="character-list">
+                    @foreach (var povCharacterName in povCharacterLinks)
+                    {
+                        <div class="character-item">
+                            @povCharacterName.Name
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-center">
+                            <button class="btn btn-secondary" @onclick="NavigateToCharacters">
+                                Return to All Characters
+                            </button>
+                        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning" role="alert">
+        Book details not found.
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public int BookId { get; set; }
+    private Book bookDetails;
+    private List<(string Id, string Name)> characterLinks = new List<(string Id, string Name)>();
+    private List<(string Id, string Name)> povCharacterLinks = new List<(string Id, string Name)>();
+    private bool isLoading = true;
+    private string errorMessage;
+    private int charactersToShow = 20;
+    private bool showLoadMore = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+        try
+        {
+            bookDetails = await GotService.GetBookByIdAsync(BookId.ToString());
+            if (bookDetails.Characters != null)
+            {
+                var initialCharacters = bookDetails.Characters.Take(charactersToShow).ToList();
+                foreach (var characterUrl in initialCharacters)
+                {
+                    var (Id, Name) = await GotService.GetCharacterNameByUrlAsync(characterUrl);
+                    if (!string.IsNullOrWhiteSpace(Name)) // Check if the name is not empty, whitespace, or null
+                    {
+                        characterLinks.Add((Id, Name));
+                    }
+                }
+                showLoadMore = bookDetails.Characters.Count() > charactersToShow;
+            }
+
+            if (bookDetails.PovCharacters != null)
+            {
+                foreach (var povCharacterUrl in bookDetails.PovCharacters)
+                {
+                    var (Id, Name) = await GotService.GetCharacterNameByUrlAsync(povCharacterUrl);
+                    if (!string.IsNullOrWhiteSpace(Name)) // Check if the name is not empty, whitespace, or null
+                    {
+                        povCharacterLinks.Add((Id, Name));
+                    }
+                }
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            errorMessage = $"Error loading book details: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task LoadMoreCharacters()
+    {
+        var additionalCharacters = bookDetails.Characters
+            .Skip(charactersToShow)
+            .Take(20).ToList(); // Load next 20 characters
+
+        foreach (var characterUrl in additionalCharacters)
+        {
+            var (Id, Name) = await GotService.GetCharacterNameByUrlAsync(characterUrl);
+            if (!string.IsNullOrWhiteSpace(Name)) // Check if the name is not empty, whitespace, or null
+            {
+                characterLinks.Add((Id, Name));
+            }
+        }
+
+        charactersToShow += 20; // Update the counter for loaded characters
+        showLoadMore = bookDetails.Characters.Count() > charactersToShow;
+    }
+
+    private void ShowLessCharacters()
+    {
+        charactersToShow = 20; // Show the first 20 characters
+        showLoadMore = true; // Show "Load More" button again
+    }
+
+    private void NavigateToCharacters()
+    {
+        NavigationManager.NavigateTo("/characters");
+    }
+}

@@ -61,8 +61,16 @@
       "PackagePath": "staticwebassets/css/open-iconic/font/fonts/open-iconic.woff"
     },
     {
+      "Id": "/Users/matthewb/GOTCharacterApp/wwwroot/dragon.png",
+      "PackagePath": "staticwebassets/dragon.png"
+    },
+    {
       "Id": "/Users/matthewb/GOTCharacterApp/wwwroot/favicon.png",
       "PackagePath": "staticwebassets/favicon.png"
+    },
+    {
+      "Id": "/Users/matthewb/GOTCharacterApp/wwwroot/gotloader.png",
+      "PackagePath": "staticwebassets/gotloader.png"
     },
     {
       "Id": "/Users/matthewb/GOTCharacterApp/wwwroot/icon-192.png",
@@ -71,6 +79,14 @@
     {
       "Id": "/Users/matthewb/GOTCharacterApp/wwwroot/index.html",
       "PackagePath": "staticwebassets/index.html"
+    },
+    {
+      "Id": "/Users/matthewb/GOTCharacterApp/wwwroot/logo.png",
+      "PackagePath": "staticwebassets/logo.png"
+    },
+    {
+      "Id": "/Users/matthewb/GOTCharacterApp/wwwroot/modalHelper.js",
+      "PackagePath": "staticwebassets/modalHelper.js"
     },
     {
       "Id": "/Users/matthewb/GOTCharacterApp/wwwroot/sample-data/weather.json",

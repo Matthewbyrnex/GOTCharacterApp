@@ -1,11 +1,114 @@
 @page "/allegiance-details"
-
 @using GOTCharacterApp.Services
 @using GOTCharacterApp.Models
 @inject GOTService GotService
 @inject NavigationManager NavigationManager
 
-@if (allegianceDetails != null)
+<style>
+    body {
+        background-color: #131313;
+        color: #ddd;
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    .card {
+        background-color: #222;
+        color: #ddd;
+        border: none;
+    }
+
+    .card-text {
+        margin-bottom: 0.5rem; /* Adjusted margin for better spacing */
+    }
+
+    .card-text strong {
+        color: #aaa; /* A lighter color for the labels */
+        margin-right: 5px; /* Space between label and value */
+    }
+
+    .card-text span {
+        color: #ddd; /* A contrasting color for the values */
+    }
+
+    .card-header {
+        background-color: #5c2a2a;
+        color: #fff;
+        padding: 1rem;
+        border-bottom: 3px solid #3a0647; /* Add a solid border for definition */
+    }
+
+    .card-header h2 {
+        margin: 0; /* Remove default margin */
+        font-size: 1.75rem; /* Increase font size */
+        font-weight: bold; /* Make it bold */
+        text-transform: uppercase; /* UPPERCASE styling */
+        letter-spacing: 2px; /* Spacing between letters */
+    }
+    .card-title {
+        color: #fff; /* Brighter color for the title */
+        font-size: 1.5rem; /* Larger font size */
+        font-weight: 600; /* Semi-bold font weight */
+        margin-bottom: 1rem; /* Space below the title */
+        text-shadow: 1px 1px 2px #000; /* Text shadow for depth */
+    }
+
+    .card-body {
+        padding: 2rem;
+    }
+
+    .character-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .character-item {
+        background-color: #333;
+        border-radius: 5px;
+        padding: 10px;
+        color: #ddd;
+    }
+
+    .center-button {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .btn-primary {
+        background-color: #5c2a2a;
+        border: 1px solid #3a0647;
+        color: #fff;
+    }
+
+    .btn-primary:hover {
+        background-color: #3a0647;
+    }
+
+    .alert {
+        background-color: #561213;
+        color: #fff;
+        border: none;
+        border-radius: 0;
+        padding: 1rem 2rem;
+    }
+</style>
+
+@if (isLoading)
+{
+    <div class="text-center">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+}
+else if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @errorMessage
+    </div>
+}
+else if (allegianceDetails != null)
 {
     <div class="container mt-3">
         <div class="card">
@@ -14,21 +117,67 @@
             </div>
             <div class="card-body">
                 <h5 class="card-title">@allegianceDetails.Words</h5>
-                <p class="card-text"><strong>Region:</strong> @allegianceDetails.Region</p>
-                <p class="card-text"><strong>Coat of Arms:</strong> @allegianceDetails.CoatOfArms</p>
-                <p class="card-text"><strong>Titles:</strong> @string.Join(", ", allegianceDetails.Titles)</p>
-                <p class="card-text"><strong>Seats:</strong> @string.Join(", ", allegianceDetails.Seats)</p>
-                <p class="card-text"><strong>Current Lord:</strong> @allegianceDetails.CurrentLord</p>
-                <p class="card-text"><strong>Heir:</strong> @allegianceDetails.Heir</p>
-                <p class="card-text"><strong>Overlord:</strong> @allegianceDetails.Overlord</p>
-                <p class="card-text"><strong>Founded:</strong> @allegianceDetails.Founded</p>
-                <p class="card-text"><strong>Founder:</strong> @allegianceDetails.Founder</p>
-                <p class="card-text"><strong>Died Out:</strong> @allegianceDetails.DiedOut</p>
-                <p class="card-text"><strong>Ancestral Weapons:</strong> @string.Join(", ", allegianceDetails.AncestralWeapons)</p>
-                <p class="card-text"><strong>Cadet Branches:</strong> @string.Join(", ", allegianceDetails.CadetBranches)</p>
-                <p class="card-text"><strong>Sworn Members:</strong> @string.Join(", ", allegianceDetails.SwornMembers)</p>
+                <p class="card-text"><strong>Region:</strong> @(string.IsNullOrEmpty(allegianceDetails.Region) ? "Unknown" : allegianceDetails.Region)</p>
+                <p class="card-text"><strong>Coat of Arms:</strong> @(string.IsNullOrEmpty(allegianceDetails.CoatOfArms) ? "Unknown" : allegianceDetails.CoatOfArms)</p>
+                <p class="card-text"><strong>Titles:</strong> @(allegianceDetails.Titles != null && allegianceDetails.Titles.Any() ? string.Join(", ", allegianceDetails.Titles) : "Unknown")</p>
+                <p class="card-text"><strong>Seats:</strong> @(allegianceDetails.Seats != null && allegianceDetails.Seats.Any() ? string.Join(", ", allegianceDetails.Seats) : "Unknown")</p>
+                <p class="card-text"><strong>Current Lord:</strong> @(string.IsNullOrEmpty(currentLordName) ? "Unknown" : currentLordName)</p>
+                <p class="card-text"><strong>Heir:</strong> @(string.IsNullOrEmpty(heirName) ? "Unknown" : heirName)</p>
+                <p class="card-text"><strong>Overlord:</strong> @(string.IsNullOrEmpty(overlordName) ? "Unknown" : overlordName)</p>
+                <p class="card-text"><strong>Founded:</strong> @(string.IsNullOrEmpty(allegianceDetails.Founded) ? "Unknown" : allegianceDetails.Founded)</p>
+                <p class="card-text"><strong>Founder:</strong> @(string.IsNullOrEmpty(founderName) ? "Unknown" : founderName)</p>
+                <p class="card-text"><strong>Died Out:</strong> @(string.IsNullOrEmpty(allegianceDetails.DiedOut) ? "Unknown" : allegianceDetails.DiedOut)</p>
+                <p class="card-text"><strong>Ancestral Weapons:</strong></p>
+                <div>
+                    @if (allegianceDetails.AncestralWeapons != null && allegianceDetails.AncestralWeapons.Any())
+                    {
+                        @foreach (var weapon in allegianceDetails.AncestralWeapons)
+                        {
+                            <p>@weapon</p>
+                        }
+                    }
+                    else
+                    {
+                        <p>Unknown</p>
+                    }
+                </div>
+
+                <p class="card-text"><strong>Cadet Branches:</strong></p>
+                <div>
+                    @if (cadetBranchesDetails != null && cadetBranchesDetails.Any())
+                    {
+                        @foreach (var cadetBranch in cadetBranchesDetails)
+                        {
+                            <p>@cadetBranch.Name</p>
+                        }
+                    }
+                    else
+                    {
+                        <p>Unknown</p>
+                    }
+                </div>
+                <p class="card-text"><strong>Sworn Members:</strong></p>
+                <div class="character-list">
+                    @foreach (var memberName in swornMemberNames)
+                    {
+                        <div class="character-item">
+                            @(string.IsNullOrEmpty(memberName) ? "Unknown" : memberName)
+                        </div>
+                    }
+                </div>
+                @if (showLoadMore)
+                {
+                    <div class="center-button mt-3"> <!-- Center button and add margin on top -->
+                        <button @onclick="LoadMoreSwornMembers" class="btn btn-primary">Load More</button>
+                    </div>
+                }
             </div>
         </div>
+        <div class="card-footer text-center">
+                            <button class="btn btn-secondary" @onclick="NavigateToCharacters">
+                                Return to All Characters
+                            </button>
+                        </div>
     </div>
 }
 else
@@ -41,9 +190,20 @@ else
     private House allegianceDetails;
     private bool isLoading = true;
     private string errorMessage;
+    private List<string> swornMemberNames = new List<string>();
+    private int swornMembersToShow = 20;
+    private bool showLoadMore = false;
+
+    // New fields to store character information
+    private string currentLordName;
+    private string heirName;
+    private string overlordName;
+    private string founderName;
+    private List<House> cadetBranchesDetails = new List<House>();
 
     protected override async Task OnInitializedAsync()
     {
+        isLoading = true;
         try
         {
             // Parse the URL from the query string
@@ -53,6 +213,17 @@ else
             if (!string.IsNullOrWhiteSpace(houseUrl))
             {
                 allegianceDetails = await GotService.GetHouseByUrlAsync(houseUrl);
+
+                // Fetch character information for Current Lord, Heir, Overlord, and Founder
+                currentLordName = await GetCharacterName(allegianceDetails.CurrentLord);
+                heirName = await GetCharacterName(allegianceDetails.Heir);
+                overlordName = await GetCharacterName(allegianceDetails.Overlord);
+                founderName = await GetCharacterName(allegianceDetails.Founder);
+
+                // Fetch Cadet Branches details
+                cadetBranchesDetails = await GetCadetBranchesDetails(allegianceDetails.CadetBranches);
+
+                await LoadSwornMembers();
             }
             else
             {
@@ -67,5 +238,65 @@ else
         {
             isLoading = false;
         }
+    }
+
+    private async Task<List<House>> GetCadetBranchesDetails(List<string> cadetBranchUrls)
+    {
+        var cadetBranchDetails = new List<House>();
+        foreach (var cadetBranchUrl in cadetBranchUrls)
+        {
+            var house = await GotService.GetHouseByUrlAsync(cadetBranchUrl);
+            if (house != null)
+            {
+                cadetBranchDetails.Add(house);
+            }
+        }
+        return cadetBranchDetails;
+    }
+
+    private async Task<string> GetCharacterName(string characterUrl)
+    {
+        if (!string.IsNullOrWhiteSpace(characterUrl))
+        {
+            var (Id, Name) = await GotService.GetCharacterNameByUrlAsync(characterUrl);
+            if (!string.IsNullOrWhiteSpace(Name))
+            {
+                return Name;
+            }
+        }
+        return "Unknown";
+    }
+
+    private async Task LoadSwornMembers()
+    {
+        if (allegianceDetails?.SwornMembers != null)
+        {
+            var initialSwornMembers = allegianceDetails.SwornMembers.Take(swornMembersToShow).ToList();
+            foreach (var memberUrl in initialSwornMembers)
+            {
+                var memberName = await GetCharacterName(memberUrl);
+                swornMemberNames.Add(memberName);
+            }
+
+            showLoadMore = allegianceDetails.SwornMembers.Count > swornMembersToShow;
+        }
+        isLoading = false;
+    }
+
+    private async Task LoadMoreSwornMembers()
+    {
+        var remainingSwornMembers = allegianceDetails.SwornMembers.Skip(swornMemberNames.Count).Take(swornMembersToShow).ToList();
+        foreach (var memberUrl in remainingSwornMembers)
+        {
+            var memberName = await GetCharacterName(memberUrl);
+            swornMemberNames.Add(memberName);
+        }
+
+        showLoadMore = allegianceDetails.SwornMembers.Count > swornMemberNames.Count;
+    }
+
+    private void NavigateToCharacters()
+    {
+        NavigationManager.NavigateTo("/characters");
     }
 }
