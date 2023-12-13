@@ -20,7 +20,7 @@ jobs:
       - name: Publish .NET Core Project
         run:
           dotnet publish GOTCharacterApp.csproj -c Release -o release --nologo
-          # changes the base-tag in index.html from '/' to 'BlazorGitHubPagesDemo' to match GitHub Pages repository subdirectory
+          # changes base-tag in index.html from '/' to 'BlazorGitHubPagesDemo' to match GitHub Pages repository subdirectory
       - name: Change base-tag in index.html from / to GOTCharacterApp
         run:
           sed -i 's/<base href="\/" \/>/<base href="\/GOTCharacterApp\/" \/>/g' release/wwwroot/index.html
