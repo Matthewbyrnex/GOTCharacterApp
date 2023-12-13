@@ -13,6 +13,14 @@
       "PackagePath": "staticwebassets/GOTCharacterApp.styles.css"
     },
     {
+      "Id": "/Users/matthewb/GOTCharacterApp/wwwroot/.DS_Store",
+      "PackagePath": "staticwebassets/.DS_Store"
+    },
+    {
+      "Id": "/Users/matthewb/GOTCharacterApp/wwwroot/css/.DS_Store",
+      "PackagePath": "staticwebassets/css/.DS_Store"
+    },
+    {
       "Id": "/Users/matthewb/GOTCharacterApp/wwwroot/css/app.css",
       "PackagePath": "staticwebassets/css/app.css"
     },
@@ -75,6 +83,10 @@
     {
       "Id": "/Users/matthewb/GOTCharacterApp/wwwroot/icon-192.png",
       "PackagePath": "staticwebassets/icon-192.png"
+    },
+    {
+      "Id": "/Users/matthewb/GOTCharacterApp/wwwroot/index.html",
+      "PackagePath": "staticwebassets/index.html"
     },
     {
       "Id": "/Users/matthewb/GOTCharacterApp/wwwroot/logo.png",

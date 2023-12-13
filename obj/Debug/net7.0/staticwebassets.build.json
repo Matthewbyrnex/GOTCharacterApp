@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "wCySfEYQHl1UjVmlCLFTtfW4GPrczGU2D6KI9h2Pgy8=",
+  "Hash": "DLawLD9CA9QrvY1pd53290UhQplDtG+apJH6G5JkSGM=",
   "Source": "GOTCharacterApp",
   "BasePath": "/",
   "Mode": "Root",
@@ -6902,6 +6902,40 @@
       "OriginalItemSpec": "/Users/matthewb/GOTCharacterApp/obj/Debug/net7.0/scopedcss/projectbundle/GOTCharacterApp.bundle.scp.css"
     },
     {
+      "Identity": "/Users/matthewb/GOTCharacterApp/wwwroot/.DS_Store",
+      "SourceId": "GOTCharacterApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/matthewb/GOTCharacterApp/wwwroot/",
+      "BasePath": "/",
+      "RelativePath": ".DS_Store",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/.DS_Store"
+    },
+    {
+      "Identity": "/Users/matthewb/GOTCharacterApp/wwwroot/css/.DS_Store",
+      "SourceId": "GOTCharacterApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/matthewb/GOTCharacterApp/wwwroot/",
+      "BasePath": "/",
+      "RelativePath": "css/.DS_Store",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/css/.DS_Store"
+    },
+    {
       "Identity": "/Users/matthewb/GOTCharacterApp/wwwroot/css/app.css",
       "SourceId": "GOTCharacterApp",
       "SourceType": "Discovered",
@@ -7172,6 +7206,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/icon-192.png"
+    },
+    {
+      "Identity": "/Users/matthewb/GOTCharacterApp/wwwroot/index.html",
+      "SourceId": "GOTCharacterApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/matthewb/GOTCharacterApp/wwwroot/",
+      "BasePath": "/",
+      "RelativePath": "index.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/index.html"
     },
     {
       "Identity": "/Users/matthewb/GOTCharacterApp/wwwroot/logo.png",
