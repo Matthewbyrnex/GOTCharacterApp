@@ -7,7 +7,7 @@
   "linkerEnabled": true,
   "resources": {
     "assembly": {
-      "GOTCharacterApp.dll": "sha256-eMHspNAcrQM667PEHQsIzfdI45XaR002efXrPj0eNms=",
+      "GOTCharacterApp.dll": "sha256-ekLR339AxchUmPKLGlgdihDTQK2+v4VhxaaAe3MmQT8=",
       "Microsoft.AspNetCore.Components.dll": "sha256-htt65mfoTHU\/Aip1UN0JQkwtdhT\/2Sr5+SGsYyXD3GU=",
       "Microsoft.AspNetCore.Components.Web.dll": "sha256-K\/kzzEVQUyWu9xVPm97L9Z2aC77jVdigNdM2fCzbi3E=",
       "Microsoft.AspNetCore.Components.WebAssembly.dll": "sha256-WROscu9VKtzHhVZVfP+A9aIJfrfcZ6cL2L96L7LrtHE=",
