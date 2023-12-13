@@ -826,3 +826,6 @@
 /Users/matthewb/GOTCharacterApp/obj/Release/net7.0/refint/GOTCharacterApp.dll
 /Users/matthewb/GOTCharacterApp/obj/Release/net7.0/GOTCharacterApp.pdb
 /Users/matthewb/GOTCharacterApp/obj/Release/net7.0/ref/GOTCharacterApp.dll
+/Users/matthewb/GOTCharacterApp/bin/Release/net7.0/publish/web.config
+/Users/matthewb/GOTCharacterApp/bin/Release/net7.0/publish/wwwroot/sample-data/weather.json
+/Users/matthewb/GOTCharacterApp/bin/Release/net7.0/publish/wwwroot/_framework/blazor.boot.json

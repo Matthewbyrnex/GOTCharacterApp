@@ -1,0 +1,4 @@
+/Users/matthewb/GOTCharacterApp/bin/Release/net7.0/publish/publish/web.config
+/Users/matthewb/GOTCharacterApp/bin/Release/net7.0/publish/publish/wwwroot/sample-data/weather.json
+/Users/matthewb/GOTCharacterApp/bin/Release/net7.0/publish/publish/wwwroot/_framework/blazor.boot.json
+/Users/matthewb/GOTCharacterApp/bin/Release/net7.0/publish/web.config
